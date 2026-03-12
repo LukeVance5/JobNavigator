@@ -1,0 +1,7 @@
+fastapi>=0.135.1
+pydantic-ai>=1.64.0
+pydantic-ai-slim[google]>=1.64.0
+uvicorn>=0.41.0
+
+[test]
+pytest>=8.4.0

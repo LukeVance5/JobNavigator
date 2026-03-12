@@ -9,4 +9,22 @@ dependencies = [
     "pydantic-ai>=1.64.0",
     "pydantic-ai-slim[google]>=1.64.0",
     "uvicorn>=0.41.0",
+    "python-dotenv>=1.0.0",
+    "google-cloud-aiplatform>=1.141.0",
 ]
+
+[project.scripts]
+dev = "uvicorn src.main:app --reload"
+
+[project.dependency-groups]
+test = [
+    "pytest>=8.4.0",
+]
+dev = [
+    "watchfiles>=0.23.0",
+    "pytest>=8.4.0",
+]
+
+[tool.uv]
+dev-dependencies = []
+
