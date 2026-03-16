@@ -1,4 +1,4 @@
-__init__
-api
-main
+core
 models
+routers
+services

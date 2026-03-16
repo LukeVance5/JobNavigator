@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import jobs
+from database import init_db
 
 # 1. Initialize the App
 app = FastAPI(
@@ -9,6 +10,9 @@ app = FastAPI(
     description="AI-powered job search and resume management",
     docs_url="/api/docs",  # Custom docs path for security
 )
+
+# Call init_db to create tables
+init_db()
 
 # 2. Setup CORS (Crucial for React frontend to talk to this API)
 app.add_middleware(
