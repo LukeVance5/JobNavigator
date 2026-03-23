@@ -1,6 +1,8 @@
+import uuid
 from database import Base
 from sqlalchemy import Column, String, DateTime, Integer
 from datetime import datetime, UTC
+
 
 class JobModel(Base):
     __tablename__ = "jobs"
@@ -20,6 +22,14 @@ class JobModel(Base):
     currency = Column(String, nullable=True)
     rate = Column(String, nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
-    applied_at = Column(DateTime, default=lambda: datetime.now(UTC))
+    applied_at = Column(DateTime, default=lambda: datetime.now(UTC), index=True)
+
     class Config:
         from_attributes = True
+
+
+class UserModel(Base):
+    __tablename__ = "users"
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)

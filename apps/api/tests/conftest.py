@@ -18,11 +18,12 @@ from models.database_models import JobModel
 # Use StaticPool to keep the in-memory connection alive for the duration of the test
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, 
+    SQLALCHEMY_DATABASE_URL,
     connect_args={"check_same_thread": False},
-    poolclass=StaticPool
+    poolclass=StaticPool,
 )
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 @pytest.fixture
 def db_session():
@@ -35,12 +36,14 @@ def db_session():
         db.close()
         Base.metadata.drop_all(bind=engine)
 
+
 @pytest.fixture
 def mock_ai_service():
     """Creates a mock of CareerAIService to avoid real Vertex AI calls."""
     mock = MagicMock()
     mock.summarize_job.return_value = "This is a mocked summary for testing."
     return mock
+
 
 @pytest.fixture
 def client(db_session, mock_ai_service):
@@ -49,14 +52,16 @@ def client(db_session, mock_ai_service):
     app.dependency_overrides[get_db] = lambda: db_session
     # Override the AI service dependency
     app.dependency_overrides[get_ai_service] = lambda: mock_ai_service
-    
+
     with TestClient(app) as c:
         yield c
-    
+
     # Always clear overrides after the test to prevent side effects
     app.dependency_overrides.clear()
 
+
 # --- Data Fixtures ---
+
 
 @pytest.fixture
 def sample_job():
@@ -66,6 +71,7 @@ def sample_job():
         location="San Francisco, CA",
         user_id="test_user_id",
     )
+
 
 @pytest.fixture
 def sample_job_with_salary():
@@ -82,11 +88,30 @@ def sample_job_with_salary():
         ),
     )
 
+
 @pytest.fixture
 def sample_job_json():
     path = Path(__file__).parent / "mocks" / "junior_python_engineer.json"
     with open(path, "r") as f:
         return json.load(f)
+
+
+@pytest.fixture
+def test_user(client: TestClient):
+    """Creates a new user and returns the user's details."""
+    user_data = {
+        "email": "test@example.com",
+        "password": "testpassword",
+    }
+    response = client.post("/api/v1/auth/register", json=user_data)
+    # if the user already exists, we can ignore the error
+    # and proceed to login.
+    if response.status_code == 400 and "Email already registered" in response.text:
+        pass
+    else:
+        assert response.status_code == 200
+    return user_data
+
 
 @pytest.fixture
 def junior_job_creator(sample_job_json):

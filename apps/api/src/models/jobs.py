@@ -40,3 +40,7 @@ class JobConcise(Job):
     summary: str
     skills: str | None = None
     yoe: str | None = None
+
+class JobList(BaseModel):
+    total: int
+    jobs: list[JobConcise]

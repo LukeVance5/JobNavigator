@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import jobs
+from routers import jobs, auth
 
 # 1. Initialize the App
 app = FastAPI(
@@ -24,6 +24,7 @@ app.add_middleware(
 API_PREFIX = "/api/v1"
 
 app.include_router(jobs.router, prefix=f"{API_PREFIX}/jobs", tags=["Jobs"])
+app.include_router(auth.router, prefix=f"{API_PREFIX}/auth", tags=["Auth"])
 
 
 @app.get("/")
