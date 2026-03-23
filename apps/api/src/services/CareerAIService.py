@@ -10,7 +10,7 @@ class CareerAIService:
             project=project_id,
             location=location
         )
-        self.model_id = "gemini-1.5-flash"
+        self.model_id = "gemini-2.5-flash-lite"
 
     def summarize_job(self, description: str) -> str:
         prompt = f"Summarize the following job description in 3-5 sentences: {description}"

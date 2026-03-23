@@ -2,6 +2,7 @@ README.md
 pyproject.toml
 src/__init__.py
 src/database.py
+src/database.py
 src/main.py
 src/api.egg-info/PKG-INFO
 src/api.egg-info/SOURCES.txt
@@ -12,6 +13,7 @@ src/core/__init__.py
 src/core/config.py
 src/core/security.py
 src/models/__init__.py
+src/models/database_models.py
 src/models/database_models.py
 src/models/jobs.py
 src/models/salary.py

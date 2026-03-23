@@ -41,6 +41,7 @@ yarn-error.log*
 #DB
 apps/api/*.db
 apps/api/*.json
+apps/api/tests/mocks
 app.db
 
 # Python
