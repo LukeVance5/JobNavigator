@@ -47,6 +47,7 @@ app.db
 # Python
 __pycache__/
 *.pyc
+*.egg-info/
 
 # Postman
 .postman/

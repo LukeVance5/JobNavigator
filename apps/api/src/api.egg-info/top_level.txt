@@ -1,8 +1,0 @@
-__init__
-core
-crud
-database
-main
-models
-routers
-services
