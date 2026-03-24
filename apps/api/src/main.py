@@ -10,8 +10,6 @@ app = FastAPI(
     docs_url="/api/docs",  # Custom docs path for security
 )
 
-# Call init_db to create tables
-init_db()
 
 # 2. Setup CORS (Crucial for React frontend to talk to this API)
 app.add_middleware(
