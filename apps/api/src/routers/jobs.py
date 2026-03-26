@@ -78,6 +78,25 @@ def read_job(
     return db_job
 
 
+@router.delete("/{job_id}", response_model=Job)
+def delete_job(
+    job_id: str,
+    db: Session = Depends(get_db),
+    current_user: UserModel = Depends(get_current_user),
+):
+    db_job = (
+        db.query(JobModel)
+        .filter(JobModel.id == job_id, JobModel.user_id == current_user.id)
+        .first()
+    )
+    if db_job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    db.delete(db_job)
+    db.commit()
+    return db_job
+
+
 @router.get("/", response_model=JobList)
 def read_user_jobs(
     db: Session = Depends(get_db),

@@ -1,10 +1,11 @@
 // /apps/web/app/components/login/LoginForm.tsx
 "use client";
-import {useRouter} from 'next/navigation'
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Input } from "./Input";
-
-export const LoginForm = () => {
+import { Input } from "@/components/ui/Input";
+import Link from "next/link";
+export default function LoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,13 +16,16 @@ export const LoginForm = () => {
       formData.append("username", email);
       formData.append("password", password);
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: formData.toString(),
         },
-        body: formData.toString(),
-      });
+      );
 
       if (!response.ok) {
         throw new Error("Failed to login");
@@ -29,7 +33,24 @@ export const LoginForm = () => {
 
       const data = await response.json();
       console.log("Login successful:", data);
-      // Handle successful login, e.g., store token and redirect
+
+      // Assuming the API returns an access_token upon successful login
+      const accessToken = data.access_token;
+
+      if (accessToken) {
+        // Set the token as an HTTP-only cookie
+        // Using `fetch` for this from a client component requires a server action or API route
+        // For simplicity and immediate fix, we'll use `document.cookie` but acknowledge it's not HTTP-only.
+        // A better approach would be a server action or Next.js API route to set an HTTP-only cookie.
+        // For middleware to read, a regular cookie is sufficient, but HTTP-only is best practice.
+        document.cookie = `token=${accessToken}; path=/; max-age=3600;`; // Set for 1 hour
+        console.log("Cookies after login:", document.cookie); // DEBUG LOG
+
+        // Redirect to the home page
+        router.push("/");
+      } else {
+        console.error("Login successful, but no access_token received.");
+      }
     } catch (error) {
       console.error("Login error:", error);
       // Handle login error, e.g., show an error message
@@ -69,8 +90,16 @@ export const LoginForm = () => {
               Sign in
             </button>
           </div>
+          <div>
+            <Link
+              href="/register"
+              className="w-full px-4 py-2 text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Register
+            </Link>
+          </div>
         </form>
       </div>
     </div>
   );
-};
+}

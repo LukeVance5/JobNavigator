@@ -6,7 +6,6 @@ from .salary import SalaryRange
 
 
 class JobCreator(BaseModel):
-    user_id: str
     title: str
     company: str | None = None
     location: str | None = None
@@ -40,6 +39,7 @@ class JobConcise(Job):
     summary: str
     skills: str | None = None
     yoe: str | None = None
+
 
 class JobList(BaseModel):
     total: int

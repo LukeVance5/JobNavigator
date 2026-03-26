@@ -1,10 +1,10 @@
 // /apps/web/app/components/register/RegisterForm.tsx
 "use client";
 import React, { useState } from "react";
-import { Input } from "./Input";
+import { Input } from "@/components/ui/Input";
+import Link from 'next/link';
 
-export const RegisterForm = () => {
-  const [username, setUsername] = useState("");
+export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -45,16 +45,6 @@ export const RegisterForm = () => {
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div>
             <Input
-              id="username"
-              type="text"
-              placeholder="Username"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div>
-            <Input
               id="email"
               type="email"
               placeholder="Email address"
@@ -80,9 +70,15 @@ export const RegisterForm = () => {
             >
               Sign up
             </button>
+            <Link
+              href="/login"
+              className="w-full px-4 py-2 text-blue-600 border border-blue-600 rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Login
+            </Link>
           </div>
         </form>
       </div>
     </div>
   );
-};
+}
